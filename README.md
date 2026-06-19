@@ -37,7 +37,7 @@ python audit_band_split.py --avp-dir data/AVP_Dataset/Fixed --plot
 
 Every one of the 28 files exceeded 200 Hz. Even the smallest (P7, 375.8 HZ) is approximately 88% above the cutoff.
 
-![Adaptive split vs. 200 Hz cutoff, (per participant)](band_split_audit.png)
+![Adaptive split vs. 200 Hz cutoff, (per participant)](figures/band_split_audit.png)
 
 This shows that the model's actual LOW band extends well past the 200 Hz cutoff up to 1000-2000 Hz of real spectral content. The original kick detector only saw a fraction of that. The remainder was routed into the snare detector's wider 200-5000 Hz net instead, which suppressed measured kick onsets (lower recall) and contaminated snare detection with data the model never classified as snare (lower precision).
 
