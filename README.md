@@ -11,15 +11,15 @@ Reproduce:
 curl -L -C - -o data/AVP_Dataset.zip "https://zenodo.org/records/3245959/files/AVP_Dataset.zip?download=1"
 unzip data/AVP_Dataset.zip -d data/AVP_Dataset
 
-# Finding 2 — label classification audit (no audio needed)
-python audit_label_bug.py --avp-dir data/AVP_Dataset/AVP_Dataset/Fixed
-
-# Finding 1 — band-split mismatch audit (audio only, no model)
+# Result 1 — band-split mismatch audit (audio only, no model)
 python audit_band_split.py --avp-dir data/AVP_Dataset/AVP_Dataset/Fixed --plot
+
+# Result 2 — label classification audit (no audio needed)
+python audit_label_analysis.py --avp-dir data/AVP_Dataset/AVP_Dataset/Fixed
 ```
 
 ## Result 1: Band-split mismatch
-`eval_onset_f1.py` transcribes generated audio using fixed frequency bands: kick as a low-pass filter below 200 Hz, snare as a band-pass filter ranging from 200-5000 Hz. However, the model was never trained on a kick/snare split. Rather, it was conditioned on an adaptive LOW/HIGH split (`compute_2band.py`, `research/adaptive_2band.py`) that splits each clip's mel-spectrogram energy 50/50 by frequency, with split point varying by spectral content.
+`eval_onset_f1.py` transcribes generated audio using fixed frequency bands: kick as a low-pass filter below 200 Hz, snare as a band-pass filter ranging from 200-5000 Hz. However, the model was never trained on a kick/snare split. Rather, it was conditioned on an adaptive LOW/HIGH split (the `compute_2band.py` function in `research/adaptive_2band.py`) that splits each clip's mel-spectrogram energy 50/50 by frequency, with split point varying by spectral content.
 
 `audit_band_split.py` recomputes this adaptive split exactly as `compute_2band` does, including the log-compression step, across all 28 AVP "Fixed" improvisation files and compares it to the hardcoded 200 Hz threshold.
 
@@ -59,7 +59,7 @@ Examples:
 | P1_Improvisation_Fixed.csv | hho | 5.927 |
 | P10_Improvisation_Fixed.csv | hho | 6.676 |
 
-The original snare detector is frequency based and hi-hats appear in the same 200-5000 Hz range. Thus, the detector miclassifies real hi-hat hits as part of its snare predictions. However, since 42.3% of reference onsets (true hi-hat hits) were dropped from the ground truth, the correctly detected hi-hat onsets have no matching reference to pair with. They register as false positives and result in directly suppressing snare precision.
+The original snare detector is frequency based and hi-hats appear in the same 200-5000 Hz range. Thus, the detector misclassifies real hi-hat hits as part of its snare predictions. However, since 42.3% of reference onsets (true hi-hat hits) were dropped from the ground truth, the correctly detected hi-hat onsets have no matching reference to pair with. They register as false positives and result in directly suppressing snare precision.
 
 ## Result 3: Timing offset
 A third potential defect is constant timing offset between generated audio and the rhythm prompt due to VAE/decoder latency. This could not be empirically validated since measurement requires cross-correlating a generated sample's onset envelope against its source prompt's envelope. However, GPU cluster access along with the full set of generated samples and corresponding AVP prompts, were not accessible for this extension. There was only one generated sample available (continuous_conditioned.mp3) used for the presentation demo and its source prompt could not be identified. Hence, a case study was not possible even for this generated audio sample at n = 1. Despite a lack of empirical results, this section is included for completeness since it is a previously established hypothesis.
