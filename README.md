@@ -19,7 +19,7 @@ python audit_label_analysis.py --avp-dir data/AVP_Dataset/AVP_Dataset/Fixed
 ```
 
 ## Result 1: Band-split mismatch
-`eval_onset_f1.py` transcribes generated audio using fixed frequency bands: kick as a low-pass filter below 200 Hz, snare as a band-pass filter ranging from 200-5000 Hz. However, the model was never trained on a kick/snare split. Rather, it was conditioned on an adaptive LOW/HIGH split (the `compute_2band.py` function in `research/adaptive_2band.py`) that splits each clip's mel-spectrogram energy 50/50 by frequency, with split point varying by spectral content.
+`eval_onset_f1.py` transcribes generated audio using fixed frequency bands: kick as a low-pass filter below 200 Hz, snare as a band-pass filter ranging from 200-5000 Hz. However, the model was never trained on a kick/snare split. Rather, it was conditioned on an adaptive LOW/HIGH split (the `compute_2band` function in `research/adaptive_2band.py`) that splits each clip's mel-spectrogram energy 50/50 by frequency, with split point varying by spectral content.
 
 `audit_band_split.py` recomputes this adaptive split exactly as `compute_2band` does, including the log-compression step, across all 28 AVP "Fixed" improvisation files and compares it to the hardcoded 200 Hz threshold.
 
