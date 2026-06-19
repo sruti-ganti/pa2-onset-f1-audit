@@ -50,7 +50,7 @@ This shows that the model's actual LOW band extends well past the 200 Hz cutoff 
 | Classified identically  | 921 (57.7%) |
 | Classified differently  | 675 (42.3%) |
 
-More importantly, the misclassifications follow the same pattern: None maps to snare and every example is a hi-hat label (hhc/hho).
+More importantly, the misclassifications follow the same pattern: `None` maps to snare and every example is a hi-hat label (`hhc/hho`).
 
 Examples:
 | File | Label | Time (s) |
