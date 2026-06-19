@@ -12,10 +12,10 @@ curl -L -C - -o data/AVP_Dataset.zip "https://zenodo.org/records/3245959/files/A
 unzip data/AVP_Dataset.zip -d data/AVP_Dataset
 
 # Finding 2 — label classification audit (no audio needed)
-python audit_label_bug.py --avp-dir data/AVP_Dataset/Fixed
+python audit_label_bug.py --avp-dir data/AVP_Dataset/AVP_Dataset/Fixed
 
 # Finding 1 — band-split mismatch audit (audio only, no model)
-python audit_band_split.py --avp-dir data/AVP_Dataset/Fixed --plot
+python audit_band_split.py --avp-dir data/AVP_Dataset/AVP_Dataset/Fixed --plot
 ```
 
 ## Result 1: Band-split mismatch
